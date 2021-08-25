@@ -1,18 +1,16 @@
 locals {
   standard_tags_asg_eks = concat(
     local.standard_tags_asg,
-    list(
-      {
-        "key"                 = "k8s.io/cluster-autoscaler/enabled",
-        "value"               = "true",
-        "propagate_at_launch" = "false"
+    [{
+      "key"                 = "k8s.io/cluster-autoscaler/enabled",
+      "value"               = "true",
+      "propagate_at_launch" = "false"
       },
       {
         "key"                 = "k8s.io/cluster-autoscaler/${local.env}",
         "value"               = "true",
         "propagate_at_launch" = "false"
-      }
-    )
+    }]
   )
 }
 

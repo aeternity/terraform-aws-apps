@@ -5,8 +5,8 @@ module "aws-lb-controller-role" {
   create_role           = true
   force_detach_policies = true
   # provider_url          = module.eks.cluster_oidc_issuer_url
-  provider_url          = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-  role_policy_arns      = [aws_iam_policy.aws_lb_controller_policy.arn]
+  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns              = [aws_iam_policy.aws_lb_controller_policy.arn]
   oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:aws-load-balancer-controller"]
 }
 

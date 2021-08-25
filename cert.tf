@@ -1,15 +1,15 @@
 data "aws_route53_zone" "apps" {
-  name         = "${var.apps_domain}."
+  name = "${var.apps_domain}."
 }
 
 data "aws_route53_zone" "tools" {
-  name         = "${var.tools_domain}."
+  name = "${var.tools_domain}."
 }
 
 resource "aws_acm_certificate" "ingress" {
   # provider                  = aws.us-east-1
-  validation_method         = "DNS"
-  domain_name               = "${local.env_human}.${var.apps_domain}"
+  validation_method = "DNS"
+  domain_name       = "${local.env_human}.${var.apps_domain}"
   subject_alternative_names = [
     "${local.env_human}.${var.tools_domain}",
     "*.${local.env_human}.${var.tools_domain}",
