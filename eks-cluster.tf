@@ -39,6 +39,14 @@ module "eks" {
       tags          = local.standard_tags_asg_eks
     }
   ]
+
+  map_roles = [
+    {
+      rolearn  = aws_iam_role.cluster_admin.arn
+      username = "cluster-admin"
+      groups   = ["system:masters"]
+    }
+  ]
 }
 
 resource "aws_eks_addon" "vpc_cni" {
