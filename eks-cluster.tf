@@ -47,16 +47,16 @@ module "eks" {
 
   node_groups = {
     apps = {
-      desired_capacity = 1
-      max_capacity     = 10
-      min_capacity     = 1
+      desired_capacity = local.config.desired_capacity
+      max_capacity     = local.config.max_capacity
+      min_capacity     = local.config.min_capacity
 
-      instance_types = ["m5.large"]
-      capacity_type  = "ON_DEMAND"
+      instance_types = [local.config.node_instance_type]
+      capacity_type  = local.config.capacity_type
       k8s_labels     = local.standard_tags
 
       update_config = {
-        max_unavailable_percentage = 50 # or set `max_unavailable`
+        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
       }
     }
   }
