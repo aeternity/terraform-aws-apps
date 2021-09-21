@@ -40,6 +40,27 @@ module "eks" {
     }
   ]
 
+  node_groups_defaults = {
+    ami_type  = "AL2_x86_64"
+    disk_size = 100
+  }
+
+  node_groups = {
+    apps = {
+      desired_capacity = 1
+      max_capacity     = 10
+      min_capacity     = 1
+
+      instance_types = ["m5.large"]
+      capacity_type  = "ON_DEMAND"
+      k8s_labels     = local.standard_tags
+
+      update_config = {
+        max_unavailable_percentage = 50 # or set `max_unavailable`
+      }
+    }
+  }
+
   map_roles = [
     {
       rolearn  = aws_iam_role.cluster_admin.arn
