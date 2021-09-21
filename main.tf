@@ -24,6 +24,8 @@ locals {
       node_instance_type         = "m5.large"
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
+      ami_type  = "AL2_x86_64"
+      disk_size = 100
     }
   }
 
