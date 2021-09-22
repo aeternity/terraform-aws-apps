@@ -40,6 +40,27 @@ module "eks" {
     }
   ]
 
+  node_groups_defaults = {
+    ami_type  = local.config.ami_type
+    disk_size = local.config.disk_size
+  }
+
+  node_groups = {
+    apps = {
+      desired_capacity = local.config.desired_capacity
+      max_capacity     = local.config.max_capacity
+      min_capacity     = local.config.min_capacity
+
+      instance_types = [local.config.node_instance_type]
+      capacity_type  = local.config.capacity_type
+      k8s_labels     = local.standard_tags
+
+      update_config = {
+        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
+      }
+    }
+  }
+
   map_roles = [
     {
       rolearn  = aws_iam_role.cluster_admin.arn
