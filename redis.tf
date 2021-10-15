@@ -1,13 +1,13 @@
 locals {
-  name       = "Redis"
-  redis_tags = merge({ "Name" : local.name }, local.standard_tags)
+  redis_name       = "superhero-backend-redis"
+  redis_tags = merge({ "Name" : local.redis_name }, local.standard_tags)
 }
 
 module "security_group" {
   source  = "terraform-aws-modules/security-group/aws"
   version = "4.4.0"
 
-  name        = local.name
+  name        = local.redis_name
   description = "Security group for Redis"
   vpc_id      = module.vpc.vpc_id
 
@@ -22,7 +22,7 @@ module "redis" {
   source  = "terraform-aws-modules/ec2-instance/aws"
   version = "3.2.0"
 
-  name                  = local.name
+  name                  = local.redis_name
   key_name              = "temp"
   instance_type         = "t2.medium"
   ami                   = "ami-049dba36e59403eff"
