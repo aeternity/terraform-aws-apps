@@ -5,3 +5,15 @@ output "irsa_role_arn" {
 output "ingress_cert_arn" {
   value = aws_acm_certificate.ingress.arn
 }
+
+output "vpc_id" {
+  value = module.vpc.vpc_id
+}
+
+output "private_subnets" {
+  value = module.vpc.private_subnets
+}
+
+output "public_subnets" {
+  value = module.vpc.public_subnets
+}
