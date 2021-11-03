@@ -1,7 +1,7 @@
 module "aws-lb-controller-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
-  role_name             = "aws-lb-controller"
+  role_name             = "aws-lb-controller-${terraform.workspace}"
   create_role           = true
   force_detach_policies = true
   # provider_url          = module.eks.cluster_oidc_issuer_url
@@ -11,6 +11,6 @@ module "aws-lb-controller-role" {
 }
 
 resource "aws_iam_policy" "aws_lb_controller_policy" {
-  name   = "AWSLoadBalancerControllerIAMPolicy"
+  name   = "AWSLoadBalancerControllerIAMPolicy-${terraform.workspace}"
   policy = file("lb-controller-iam-policy.json")
 }
