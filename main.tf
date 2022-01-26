@@ -13,8 +13,6 @@ locals {
 
   env_config = {
     dev = {
-    }
-    default = {
       eks_worker_instance_type   = "m5.large"
       eks_worker_max_count       = 5
       cluster_version            = 1.21
@@ -32,8 +30,6 @@ locals {
     }
 
     prd = {
-    }
-    default = {
       eks_worker_instance_type   = "m5.large"
       eks_worker_max_count       = 5
       cluster_version            = 1.21
@@ -51,8 +47,6 @@ locals {
     }
 
     stg = {
-    }
-    default = {
       eks_worker_instance_type   = "m5.large"
       eks_worker_max_count       = 5
       cluster_version            = 1.21
@@ -70,7 +64,7 @@ locals {
     }
   }
 
-  config = merge(local.env_config["default"], lookup(local.env_config, terraform.workspace, {}))
+  config = merge(lookup(local.env_config, terraform.workspace, {}))
 
   standard_tags = {
     "env"         = local.env

@@ -21,3 +21,7 @@ output "public_subnets" {
 output "vpc_cidr_block" {
   value = module.vpc.vpc_cidr_block
 }
+
+output "cluster_oidc_issuer_url" {
+  value = module.eks.cluster_oidc_issuer_url
+}
