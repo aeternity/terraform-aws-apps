@@ -17,3 +17,13 @@ resource "aws_iam_role" "cluster_admin" {
 
   tags = local.standard_tags
 }
+
+data "aws_iam_policy_document" "fluentbit" {
+  statement {
+    actions = [
+      "*"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/opensearch-${terraform.workspace}"]
+  }
+}
