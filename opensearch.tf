@@ -35,7 +35,7 @@ resource "null_resource" "es_backend_role" {
     command = <<EOT
         curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
         -X PATCH \
-        https://opensearch-dev.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
+        https://${local.cluster_name}.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
         -H 'Content-Type: application/json' \
         -d'
         [
@@ -53,7 +53,7 @@ resource "null_resource" "ism_rollover_index_templates" {
     command = <<EOT
         curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
         -X PUT \
-        https://opensearch-dev.aepps.com/_index_template/ism_rollover?pretty \
+        https://${local.cluster_name}.aepps.com/_index_template/ism_rollover?pretty \
         -H 'Content-Type: application/json' \
         -d'
         {
@@ -74,7 +74,7 @@ resource "null_resource" "fluent_bit_index" {
     command = <<EOT
         curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
         -X PUT \
-        https://opensearch-dev.aepps.com/fluent-bit-000005 \
+        https://${local.cluster_name}.aepps.com/fluent-bit-000005 \
         -H 'Content-Type: application/json' \
         -d'
         {
