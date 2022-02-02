@@ -47,3 +47,45 @@ resource "null_resource" "es_backend_role" {
 EOT
   }
 }
+
+resource "null_resource" "ism_rollover_index_templates" {
+  provisioner "local-exec" {
+    command = <<EOT
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        -X PUT \
+        https://opensearch-dev.aepps.com/_index_template/ism_rollover?pretty \
+        -H 'Content-Type: application/json' \
+        -d'
+        {
+          "index_patterns": ["fluent-bit*"],
+          "template": {
+          "settings": {
+            "plugins.index_state_management.rollover_alias": "fluentbit"
+          }
+        }
+        }
+        '
+EOT
+  }
+}
+
+resource "null_resource" "fluent_bit_index" {
+  provisioner "local-exec" {
+    command = <<EOT
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        -X PUT \
+        https://opensearch-dev.aepps.com/fluent-bit-000005 \
+        -H 'Content-Type: application/json' \
+        -d'
+        {
+          "aliases": {
+            "fluentbit": {
+              "is_write_index": true
+            }
+          }
+        }
+        '
+EOT
+  }
+  depends_on = [null_resource.ism_rollover_index_templates]
+}
