@@ -89,3 +89,64 @@ EOT
   }
   depends_on = [null_resource.ism_rollover_index_templates]
 }
+
+
+resource "null_resource" "fluent_bit_rollover_policy" {
+  provisioner "local-exec" {
+    command = <<EOT
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        -X PUT \
+        https://${local.cluster_name}.aepps.com/_plugins/_ism/policies/fluent-bit-rollover-${local.cluster_name} \
+        -H 'Content-Type: application/json' \
+        -d'
+        {
+            "policy": {
+                "policy_id": "rollover",
+                "description": "A simple default policy that deletes old indicies.",
+                "default_state": "rollover",
+                "states": [
+                    {
+                        "name": "rollover",
+                        "actions": [
+                            {
+                                "rollover": {
+                                    "min_index_age": "1d"
+                                }
+                            }
+                        ],
+                        "transitions": [
+                            {
+                                "state_name": "delete",
+                                "conditions": {
+                                    "min_index_age": "1d"
+                                }
+                            }
+                        ]
+                    },
+                    {
+                        "name": "delete",
+                        "actions": [
+                            {
+                                "delete": {}
+                            }
+                        ],
+                        "transitions": []
+                    }
+                ],
+                "ism_template": [
+                    {
+                        "index_patterns": [
+                            "fluent-bit*"
+                        ],
+                        "priority": 100,
+                        "last_updated_time": 1643744811677
+                    }
+                ]
+            }
+        }
+
+        '
+EOT
+  }
+  depends_on = [null_resource.ism_rollover_index_templates]
+}
