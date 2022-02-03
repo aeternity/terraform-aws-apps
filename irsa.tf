@@ -22,7 +22,7 @@ module "aws-fluentbit-role" {
   force_detach_policies = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.fluentbit.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:logging:aws-for-fluent-bit"]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:logging:fluent-bit"]
 }
 
 resource "aws_iam_policy" "fluentbit" {

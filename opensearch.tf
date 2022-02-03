@@ -74,7 +74,7 @@ resource "null_resource" "fluent_bit_index" {
     command = <<EOT
         curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
         -X PUT \
-        https://${local.cluster_name}.aepps.com/fluent-bit-000005 \
+        https://${local.cluster_name}.aepps.com/fluent-bit-000001 \
         -H 'Content-Type: application/json' \
         -d'
         {
@@ -102,7 +102,7 @@ resource "null_resource" "fluent_bit_rollover_policy" {
         {
             "policy": {
                 "policy_id": "rollover",
-                "description": "A simple default policy that deletes old indicies.",
+                "description": "A simple default policy that rollover and deletes old indicies.",
                 "default_state": "rollover",
                 "states": [
                     {
