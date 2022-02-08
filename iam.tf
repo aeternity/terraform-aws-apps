@@ -27,3 +27,8 @@ data "aws_iam_policy_document" "fluentbit" {
     resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/opensearch-${terraform.workspace}"]
   }
 }
+
+resource "aws_iam_service_linked_role" "es" {
+  count = "${terraform.workspace}" == "dev" ? 0 : 1
+  aws_service_name = "es.amazonaws.com"
+}

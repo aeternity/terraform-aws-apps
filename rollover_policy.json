@@ -1,0 +1,45 @@
+{
+    "policy": {
+        "policy_id": "rollover",
+        "description": "A simple default policy that deletes old indicies.",
+        "default_state": "rollover",
+        "states": [
+            {
+                "name": "rollover",
+                "actions": [
+                    {
+                        "rollover": {
+                            "min_index_age": "14d"
+                        }
+                    }
+                ],
+                "transitions": [
+                    {
+                        "state_name": "delete",
+                        "conditions": {
+                            "min_index_age": "15d"
+                        }
+                    }
+                ]
+            },
+            {
+                "name": "delete",
+                "actions": [
+                    {
+                        "delete": {}
+                    }
+                ],
+                "transitions": []
+            }
+        ],
+        "ism_template": [
+            {
+                "index_patterns": [
+                    "fluent-bit*"
+                ],
+                "priority": 100,
+                "last_updated_time": 1643744811677
+            }
+        ]
+    }
+}

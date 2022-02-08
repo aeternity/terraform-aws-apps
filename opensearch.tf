@@ -1,9 +1,14 @@
 locals {
   cluster_name   = "opensearch-${terraform.workspace}"
   cluster_domain = "aepps.com"
+  es_linked_role = data.aws_iam_role.service_linked_role.id
 }
 
 data "aws_region" "current" {}
+
+data "aws_iam_role" "service_linked_role" {
+  name = "AWSServiceRoleForAmazonElasticsearchService"
+}
 
 provider "elasticsearch" {
   url                   = "https://${local.cluster_name}.${local.cluster_domain}"
@@ -28,6 +33,7 @@ module "opensearch" {
   ebs_enabled             = var.ebs_enabled[terraform.workspace]
   volume_size             = var.volume_size[terraform.workspace]
   hot_instance_type       = var.hot_instance_type[terraform.workspace]
+  aws_iam_service_linked_role_es = local.es_linked_role
 }
 
 resource "null_resource" "es_backend_role" {
@@ -40,12 +46,13 @@ resource "null_resource" "es_backend_role" {
         -d'
         [
           {
-            "op": "add", "path": "/backend_roles", "value": ["${module.eks.cluster_iam_role_arn}"]
+            "op": "add", "path": "/backend_roles", "value": ["${module.eks.worker_iam_role_arn}"]
           }
         ]
         '
 EOT
   }
+  depends_on = [module.opensearch]
 }
 
 resource "null_resource" "ism_rollover_index_templates" {
@@ -67,6 +74,7 @@ resource "null_resource" "ism_rollover_index_templates" {
         '
 EOT
   }
+  depends_on = [module.opensearch]
 }
 
 resource "null_resource" "fluent_bit_index" {
@@ -148,5 +156,5 @@ resource "null_resource" "fluent_bit_rollover_policy" {
         '
 EOT
   }
-  depends_on = [null_resource.ism_rollover_index_templates]
+  depends_on = [null_resource.fluent_bit_index]
 }
