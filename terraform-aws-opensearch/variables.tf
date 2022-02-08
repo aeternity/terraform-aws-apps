@@ -112,3 +112,8 @@ variable "volume_size" {
   description = "The opensearch ebs volume size."
   type        = string
 }
+
+variable "aws_iam_service_linked_role_es" {
+  description = "The opensearch linked role."
+  type        = any
+}

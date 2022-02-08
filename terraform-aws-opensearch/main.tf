@@ -10,11 +10,6 @@ module "acm" {
   tags = var.tags
 }
 
-resource "aws_iam_service_linked_role" "es" {
-  count            = var.create_service_role ? 1 : 0
-  aws_service_name = "es.amazonaws.com"
-}
-
 resource "aws_elasticsearch_domain" "opensearch" {
   domain_name           = var.cluster_name
   elasticsearch_version = "OpenSearch_${var.cluster_version}"
@@ -78,7 +73,7 @@ resource "aws_elasticsearch_domain" "opensearch" {
 
   tags = var.tags
 
-  depends_on = [aws_iam_service_linked_role.es]
+  depends_on = [var.aws_iam_service_linked_role_es]
 }
 
 resource "aws_route53_record" "opensearch" {

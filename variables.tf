@@ -32,7 +32,7 @@ variable "master_instance_enabled" {
 
 variable "hot_instance_count" {
   default = {
-    "dev" = "1"
+    "dev" = "2"
     "stg" = "1"
     "prd" = "2"
   }
