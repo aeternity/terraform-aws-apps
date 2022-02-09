@@ -29,6 +29,6 @@ data "aws_iam_policy_document" "fluentbit" {
 }
 
 resource "aws_iam_service_linked_role" "es" {
-  count = "${terraform.workspace}" == "dev" ? 0 : 1
+  count = "${terraform.workspace}" == "dev" ? 1 : 0
   aws_service_name = "es.amazonaws.com"
 }
