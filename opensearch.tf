@@ -36,7 +36,26 @@ module "opensearch" {
   aws_iam_service_linked_role_es = local.es_linked_role
 }
 
-resource "null_resource" "es_backend_role" {
+resource "null_resource" "es_backend_role_cluster" {
+  provisioner "local-exec" {
+    command = <<EOT
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        -X PATCH \
+        https://${local.cluster_name}.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
+        -H 'Content-Type: application/json' \
+        -d'
+        [
+          {
+            "op": "add", "path": "/backend_roles", "value": ["${module.eks.cluster_iam_role_arn}"]
+          }
+        ]
+        '
+EOT
+  }
+  depends_on = [module.opensearch]
+}
+
+resource "null_resource" "es_backend_role_worker" {
   provisioner "local-exec" {
     command = <<EOT
         curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
@@ -52,7 +71,7 @@ resource "null_resource" "es_backend_role" {
         '
 EOT
   }
-  depends_on = [module.opensearch]
+  depends_on = [module.opensearch, null_resource.es_backend_role_cluster]
 }
 
 resource "null_resource" "ism_rollover_index_templates" {
