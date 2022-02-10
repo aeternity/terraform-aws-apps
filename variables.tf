@@ -33,15 +33,15 @@ variable "master_instance_enabled" {
 variable "hot_instance_count" {
   default = {
     "dev" = "2"
-    "stg" = "1"
+    "stg" = "2"
     "prd" = "2"
   }
 }
 
 variable "availability_zones" {
   default = {
-    "dev" = "1"
-    "stg" = "1"
+    "dev" = "2"
+    "stg" = "2"
     "prd" = "2"
   }
 }
@@ -62,7 +62,7 @@ variable "volume_size" {
   default = {
     "dev" = "100"
     "stg" = "100"
-    "prd" = "500"
+    "prd" = "200"
   }
 }
 
