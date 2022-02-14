@@ -34,7 +34,7 @@ resource "aws_iam_service_linked_role" "es" {
 }
 
 resource "aws_iam_policy" "autoscaler_policy" {
-  name        = "autoscaler_policy"
+  name        = "autoscaler-policy-${terraform.workspace}"
   path        = "/"
   description = "EKS autoscaler policy"
 
@@ -60,4 +60,26 @@ resource "aws_iam_policy" "autoscaler_policy" {
 resource "aws_iam_role_policy_attachment" "autoscaler_policy_attach" {
   role       = module.eks.worker_iam_role_name
   policy_arn = aws_iam_policy.autoscaler_policy.arn
+}
+
+resource "aws_iam_policy" "s3_policy" {
+  name        = "s3-policy-${terraform.workspace}"
+  path        = "/"
+  description = "EKS s3 policy"
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Action = "*"
+        Effect   = "Allow"
+        Resource = "arn:aws:s3:::aeternity-superhero-graffiti-${terraform.workspace}"
+      },
+    ]
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
+  role       = module.eks.worker_iam_role_name
+  policy_arn = aws_iam_policy.s3_policy.arn
 }
