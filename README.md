@@ -1,6 +1,6 @@
 # Terraform code for aepps infrastructure.
 
-## Opensearch module,resources and notes for deployment
+## Opensearch module,resources and deployment notes.
 
 The opensearch module is deployed with internal database for authentication.
 It requires master user and password. 
@@ -10,7 +10,9 @@ The pgp key is stored in our vault server: https://vault.ops.aeternity.com:18200
 The secret name gpg_passphrase.
 The used email for gpg key: aeternity@aeternity.com.
 
-Additional resources , which are not supported by terraform provider.They are implemented with terraform null resource and local exec. Please keep in mind that these terraform resources are not aware of executed commands result, so check carefully the result.
+Additional Opnensearch resources, which are not supported by terraform provider are implemented with terraform null resource and local exec.
+Please keep in mind that these terraform resources are not aware of curl command result, so check carefully the result.
+
 Opensearch Backend Roles: 
 
 1.es_backend_role_cluster - Adding the eks cluster admin role to all_access role in Opensearch.
