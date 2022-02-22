@@ -4,13 +4,6 @@ data "aws_iam_role" "service_linked_role" {
   name = "AWSServiceRoleForAmazonElasticsearchService"
 }
 
-provider "elasticsearch" {
-  url                   = "https://${local.cluster_name}.${local.cluster_domain}"
-  aws_region            = data.aws_region.current.name
-  elasticsearch_version = "7.10.2"
-  healthcheck           = false
-}
-
 module "opensearch" {
   source          = "./terraform-aws-opensearch"
   cluster_name    = local.cluster_name
