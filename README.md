@@ -6,7 +6,7 @@ The opensearch module is deployed with internal database for authentication.
 It requires master user and password. 
 Currently we are using git-secret to keep the master user password per environment as secret in main.auto.tfvars file.  
 Link to git-secret : https://git-secret.io/.  
-The pgp key is stored in our vault server: https://vault.ops.aeternity.com:18200/ui/vault/auth.  
+The pgp key is stored in our vault server.  
 The secret name is gpg_passphrase.  
 The used email for gpg key: aeternity@aeternity.com.
 
