@@ -11,6 +11,10 @@ locals {
   env       = "${terraform.workspace}-${random_string.id_suffix.result}"
   env_human = terraform.workspace
 
+  cluster_name   = "opensearch-${terraform.workspace}"
+  cluster_domain = "aepps.com"
+  es_linked_role = data.aws_iam_role.service_linked_role.id
+
   env_config = {
     dev = {
       eks_worker_instance_type   = "m5.large"

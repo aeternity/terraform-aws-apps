@@ -24,17 +24,17 @@ data "aws_iam_policy_document" "fluentbit" {
       "*"
     ]
     effect    = "Allow"
-    resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/opensearch-${terraform.workspace}"]
+    resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/${local.cluster_name}"]
   }
 }
 
 resource "aws_iam_service_linked_role" "es" {
-  count = "${terraform.workspace}" == "dev" ? 1 : 0
+  count = "${local.env_human}" == "dev" ? 1 : 0
   aws_service_name = "es.amazonaws.com"
 }
 
 resource "aws_iam_policy" "autoscaler_policy" {
-  name        = "autoscaler-policy-${terraform.workspace}"
+  name        = "autoscaler-policy-${local.env_human}"
   path        = "/"
   description = "EKS autoscaler policy"
 
@@ -63,7 +63,7 @@ resource "aws_iam_role_policy_attachment" "autoscaler_policy_attach" {
 }
 
 resource "aws_iam_policy" "s3_policy" {
-  name        = "s3-policy-${terraform.workspace}"
+  name        = "s3-policy-${local.env_human}"
   path        = "/"
   description = "EKS s3 policy"
 
@@ -73,7 +73,7 @@ resource "aws_iam_policy" "s3_policy" {
       {
         Action = "*"
         Effect   = "Allow"
-        Resource = "arn:aws:s3:::aeternity-superhero-graffiti-${terraform.workspace}"
+        Resource = "arn:aws:s3:::aeternity-superhero-graffiti-${local.env_human}"
       },
     ]
   })

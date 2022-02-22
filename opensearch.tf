@@ -1,9 +1,3 @@
-locals {
-  cluster_name   = "opensearch-${terraform.workspace}"
-  cluster_domain = "aepps.com"
-  es_linked_role = data.aws_iam_role.service_linked_role.id
-}
-
 data "aws_region" "current" {}
 
 data "aws_iam_role" "service_linked_role" {
@@ -21,25 +15,25 @@ module "opensearch" {
   source          = "./terraform-aws-opensearch"
   cluster_name    = local.cluster_name
   cluster_domain  = local.cluster_domain
-  cluster_version = "1.0"
+  cluster_version = "1.1"
 
-  warm_instance_enabled   = var.warm_instance_enabled[terraform.workspace]
-  master_instance_count   = var.master_instance_count[terraform.workspace]
-  master_instance_enabled = var.master_instance_enabled[terraform.workspace]
-  hot_instance_count      = var.hot_instance_count[terraform.workspace]
-  availability_zones      = var.availability_zones[terraform.workspace]
+  warm_instance_enabled   = var.warm_instance_enabled[local.env_human]
+  master_instance_count   = var.master_instance_count[local.env_human]
+  master_instance_enabled = var.master_instance_enabled[local.env_human]
+  hot_instance_count      = var.hot_instance_count[local.env_human]
+  availability_zones      = var.availability_zones[local.env_human]
   master_user_name        = "es-admin"
-  master_user_password    = var.opensearch_master_user_password[terraform.workspace]
-  ebs_enabled             = var.ebs_enabled[terraform.workspace]
-  volume_size             = var.volume_size[terraform.workspace]
-  hot_instance_type       = var.hot_instance_type[terraform.workspace]
+  master_user_password    = var.opensearch_master_user_password[local.env_human]
+  ebs_enabled             = var.ebs_enabled[local.env_human]
+  volume_size             = var.volume_size[local.env_human]
+  hot_instance_type       = var.hot_instance_type[local.env_human]
   aws_iam_service_linked_role_es = local.es_linked_role
 }
 
 resource "null_resource" "es_backend_role_cluster" {
   provisioner "local-exec" {
     command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
         -X PATCH \
         https://${local.cluster_name}.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
         -H 'Content-Type: application/json' \
@@ -58,7 +52,7 @@ EOT
 resource "null_resource" "es_backend_role_worker" {
   provisioner "local-exec" {
     command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
         -X PATCH \
         https://${local.cluster_name}.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
         -H 'Content-Type: application/json' \
@@ -77,7 +71,7 @@ EOT
 resource "null_resource" "ism_rollover_index_templates" {
   provisioner "local-exec" {
     command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
         -X PUT \
         https://${local.cluster_name}.aepps.com/_index_template/ism_rollover?pretty \
         -H 'Content-Type: application/json' \
@@ -99,7 +93,7 @@ EOT
 resource "null_resource" "fluent_bit_index" {
   provisioner "local-exec" {
     command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
         -X PUT \
         https://${local.cluster_name}.aepps.com/fluent-bit-000001 \
         -H 'Content-Type: application/json' \
@@ -121,7 +115,7 @@ EOT
 resource "null_resource" "fluent_bit_rollover_policy" {
   provisioner "local-exec" {
     command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[terraform.workspace]}" \
+        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
         -X PUT \
         https://${local.cluster_name}.aepps.com/_plugins/_ism/policies/fluent-bit-rollover-${local.cluster_name} \
         -H 'Content-Type: application/json' \
