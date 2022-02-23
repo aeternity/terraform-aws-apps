@@ -8,11 +8,6 @@ terraform {
       source  = "hashicorp/kubernetes"
       version = "~> 2.4"
     }
-
-    elasticsearch = {
-      source  = "phillbaker/elasticsearch"
-      version = "2.0.0-beta.3"
-    }
   }
 
   backend "s3" {
