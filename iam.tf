@@ -18,21 +18,6 @@ resource "aws_iam_role" "cluster_admin" {
   tags = local.standard_tags
 }
 
-data "aws_iam_policy_document" "fluentbit" {
-  statement {
-    actions = [
-      "*"
-    ]
-    effect    = "Allow"
-    resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/${local.cluster_name}"]
-  }
-}
-
-resource "aws_iam_service_linked_role" "es" {
-  count = "${local.env_human}" == "dev" ? 1 : 0
-  aws_service_name = "es.amazonaws.com"
-}
-
 resource "aws_iam_policy" "autoscaler_policy" {
   name        = "autoscaler-policy-${local.env_human}"
   path        = "/"
