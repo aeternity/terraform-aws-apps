@@ -15,11 +15,10 @@ locals {
   env       = "${terraform.workspace}-${random_string.id_suffix.result}"
   env_human = terraform.workspace
 
-  cluster_name   = "opensearch-${terraform.workspace}"
+  cluster_name   = "opensearch-${local.env_human}"
   cluster_domain = "aepps.com"
   es_linked_role = data.aws_iam_role.service_linked_role.id
-  #temp will be fixed somehow
-  opensearch_master_user_password = data.vault_generic_secret.opensearch_master_user_password.data["opensearch_master_user_password_dev"]
+  opensearch_master_user_password = data.vault_generic_secret.opensearch_master_user_password.data["opensearch_master_user_password_${local.env_human}"]
 
   env_config = {
     dev = {
