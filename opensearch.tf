@@ -5,7 +5,7 @@ data "aws_iam_role" "service_linked_role" {
 }
 
 module "opensearch" {
-  source          = "./terraform-aws-opensearch"
+  source          = "./modules/terraform-aws-opensearch"
   cluster_name    = local.cluster_name
   cluster_domain  = local.cluster_domain
   cluster_version = "1.1"
@@ -23,144 +23,8 @@ module "opensearch" {
   aws_iam_service_linked_role_es = local.es_linked_role
 }
 
-resource "null_resource" "es_backend_role_cluster" {
+resource "null_resource" "opensearch_config" {  
   provisioner "local-exec" {
-    command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
-        -X PATCH \
-        https://${local.cluster_name}.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
-        -H 'Content-Type: application/json' \
-        -d'
-        [
-          {
-            "op": "add", "path": "/backend_roles", "value": ["${module.eks.cluster_iam_role_arn}"]
-          }
-        ]
-        '
-EOT
+    command = "./scripts/opensearch_config.sh ${local.opensearch_master_user_password} ${var.opensearch_master_user} ${local.cluster_name} ${module.eks.cluster_iam_role_arn} ${module.eks.worker_iam_role_arn}"
   }
-  depends_on = [module.opensearch]
-}
-
-resource "null_resource" "es_backend_role_worker" {
-  provisioner "local-exec" {
-    command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
-        -X PATCH \
-        https://${local.cluster_name}.aepps.com/_opendistro/_security/api/rolesmapping/all_access?pretty \
-        -H 'Content-Type: application/json' \
-        -d'
-        [
-          {
-            "op": "add", "path": "/backend_roles", "value": ["${module.eks.worker_iam_role_arn}"]
-          }
-        ]
-        '
-EOT
-  }
-  depends_on = [module.opensearch, null_resource.es_backend_role_cluster]
-}
-
-resource "null_resource" "ism_rollover_index_templates" {
-  provisioner "local-exec" {
-    command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
-        -X PUT \
-        https://${local.cluster_name}.aepps.com/_index_template/ism_rollover?pretty \
-        -H 'Content-Type: application/json' \
-        -d'
-        {
-          "index_patterns": ["fluent-bit*"],
-          "template": {
-          "settings": {
-            "plugins.index_state_management.rollover_alias": "fluentbit"
-          }
-        }
-        }
-        '
-EOT
-  }
-  depends_on = [module.opensearch]
-}
-
-resource "null_resource" "fluent_bit_index" {
-  provisioner "local-exec" {
-    command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
-        -X PUT \
-        https://${local.cluster_name}.aepps.com/fluent-bit-000001 \
-        -H 'Content-Type: application/json' \
-        -d'
-        {
-          "aliases": {
-            "fluentbit": {
-              "is_write_index": true
-            }
-          }
-        }
-        '
-EOT
-  }
-  depends_on = [null_resource.ism_rollover_index_templates]
-}
-
-
-resource "null_resource" "fluent_bit_rollover_policy" {
-  provisioner "local-exec" {
-    command = <<EOT
-        curl -sS -u "es-admin:${var.opensearch_master_user_password[local.env_human]}" \
-        -X PUT \
-        https://${local.cluster_name}.aepps.com/_plugins/_ism/policies/fluent-bit-rollover-${local.cluster_name} \
-        -H 'Content-Type: application/json' \
-        -d'
-        {
-            "policy": {
-                "policy_id": "rollover",
-                "description": "A simple default policy that rollover and deletes old indicies.",
-                "default_state": "rollover",
-                "states": [
-                    {
-                        "name": "rollover",
-                        "actions": [
-                            {
-                                "rollover": {
-                                    "min_index_age": "1d"
-                                }
-                            }
-                        ],
-                        "transitions": [
-                            {
-                                "state_name": "delete",
-                                "conditions": {
-                                    "min_index_age": "1d"
-                                }
-                            }
-                        ]
-                    },
-                    {
-                        "name": "delete",
-                        "actions": [
-                            {
-                                "delete": {}
-                            }
-                        ],
-                        "transitions": []
-                    }
-                ],
-                "ism_template": [
-                    {
-                        "index_patterns": [
-                            "fluent-bit*"
-                        ],
-                        "priority": 100,
-                        "last_updated_time": 1643744811677
-                    }
-                ]
-            }
-        }
-
-        '
-EOT
-  }
-  depends_on = [null_resource.fluent_bit_index]
 }

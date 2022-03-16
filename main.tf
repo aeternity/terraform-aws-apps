@@ -1,5 +1,9 @@
 data "aws_availability_zones" "available" {}
 
+data "vault_generic_secret" "opensearch_master_user_password" {
+  path = "secret/superhero"
+}
+
 resource "random_string" "id_suffix" {
   length  = 4
   special = false
@@ -14,6 +18,8 @@ locals {
   cluster_name   = "opensearch-${terraform.workspace}"
   cluster_domain = "aepps.com"
   es_linked_role = data.aws_iam_role.service_linked_role.id
+  #temp will be fixed somehow
+  opensearch_master_user_password = data.vault_generic_secret.opensearch_master_user_password.data["opensearch_master_user_password_dev"]
 
   env_config = {
     dev = {
@@ -56,7 +62,7 @@ locals {
       cluster_version            = 1.21
       desired_capacity           = 1
       max_capacity               = 10
-      min_capacity               = 1
+      min_capacity               = 3
       node_instance_type         = "m5.large"
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50

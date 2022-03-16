@@ -77,3 +77,7 @@ variable "hot_instance_type" {
     "prd" = "t3.medium.elasticsearch"
   }
 }
+
+variable "opensearch_master_user" {
+  default = "es-admin"
+}

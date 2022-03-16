@@ -29,3 +29,13 @@ resource "aws_iam_policy" "fluentbit" {
   name   = "fluentbit-${local.env_human}"
   policy = data.aws_iam_policy_document.fluentbit.json
 }
+
+data "aws_iam_policy_document" "fluentbit" {
+  statement {
+    actions = [
+      "*"
+    ]
+    effect    = "Allow"
+    resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/${local.cluster_name}"]
+  }
+}
