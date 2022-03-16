@@ -23,8 +23,3 @@ module "opensearch" {
   aws_iam_service_linked_role_es = local.es_linked_role
 }
 
-resource "null_resource" "opensearch_config" {  
-  provisioner "local-exec" {
-    command = "./scripts/opensearch_config.sh ${local.opensearch_master_user_password} ${var.opensearch_master_user} ${local.cluster_name} ${module.eks.cluster_iam_role_arn} ${module.eks.worker_iam_role_arn}"
-  }
-}
