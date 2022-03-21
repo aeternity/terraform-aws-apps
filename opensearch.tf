@@ -15,7 +15,7 @@ module "opensearch" {
   master_instance_enabled = local.config.master_instance_enabled
   hot_instance_count      = local.config.hot_instance_count
   availability_zones      = local.config.availability_zones
-  master_user_name        = "es-admin"
+  master_user_name        = var.opensearch_master_user
   master_user_password    = var.opensearch_master_user_password[local.env_human]
   ebs_enabled             = local.config.ebs_enabled
   volume_size             = local.config.volume_size
