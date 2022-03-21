@@ -15,9 +15,9 @@ locals {
   env       = "${terraform.workspace}-${random_string.id_suffix.result}"
   env_human = terraform.workspace
 
-  cluster_name   = "opensearch-${local.env_human}"
-  cluster_domain = "aepps.com"
-  es_linked_role = data.aws_iam_role.service_linked_role.id
+  cluster_name                    = "opensearch-${local.env_human}"
+  cluster_domain                  = "aepps.com"
+  es_linked_role                  = data.aws_iam_role.service_linked_role.id
   opensearch_master_user_password = data.vault_generic_secret.opensearch_master_user_password.data["opensearch_master_user_password_${local.env_human}"]
 
   env_config = {
@@ -36,6 +36,14 @@ locals {
       cidr                       = "10.0.0.0/16"
       private_subnets            = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
       public_subnets             = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+      warm_instance_enabled      = "false"
+      master_instance_count      = "1"
+      master_instance_enabled    = "false"
+      hot_instance_count         = "2"
+      availability_zones         = "2"
+      ebs_enabled                = "true"
+      volume_size                = "100"
+      hot_instance_type          = "t3.medium.elasticsearch"
     }
 
     prd = {
@@ -53,6 +61,14 @@ locals {
       cidr                       = "172.16.0.0/16"
       private_subnets            = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
       public_subnets             = ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
+      warm_instance_enabled      = "false"
+      master_instance_count      = "1"
+      master_instance_enabled    = "false"
+      hot_instance_count         = "2"
+      availability_zones         = "2"
+      ebs_enabled                = "true"
+      volume_size                = "200"
+      hot_instance_type          = "t3.medium.elasticsearch"
     }
 
     stg = {
@@ -70,6 +86,14 @@ locals {
       cidr                       = "192.168.0.0/16"
       private_subnets            = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
       public_subnets             = ["192.168.4.0/24", "192.168.5.0/24", "192.168.6.0/24"]
+      warm_instance_enabled      = "false"
+      master_instance_count      = "1"
+      master_instance_enabled    = "false"
+      hot_instance_count         = "2"
+      availability_zones         = "2"
+      ebs_enabled                = "true"
+      volume_size                = "100"
+      hot_instance_type          = "t3.medium.elasticsearch"
     }
   }
 
@@ -96,3 +120,4 @@ locals {
   JSON
   ])
 }
+
