@@ -1,13 +1,15 @@
 data "aws_availability_zones" "available" {}
 
-data "vault_generic_secret" "opensearch_master_user_password" {
-  path = "secret/superhero"
-}
-
 resource "random_string" "id_suffix" {
   length  = 4
   special = false
   upper   = false
+}
+
+resource "random_string" "opensearch_master_user_password" {
+  length  = 8
+  special = true
+  upper   = true
 }
 
 locals {
@@ -18,7 +20,7 @@ locals {
   cluster_name                    = "opensearch-${local.env_human}"
   cluster_domain                  = "aepps.com"
   es_linked_role                  = data.aws_iam_role.service_linked_role.id
-  opensearch_master_user_password = data.vault_generic_secret.opensearch_master_user_password.data["opensearch_master_user_password_${local.env_human}"]
+  opensearch_master_user_password = random_string.opensearch_master_user_password.result
 
   env_config = {
     dev = {
