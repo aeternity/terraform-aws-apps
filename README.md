@@ -3,14 +3,9 @@
 ## Opensearch module,resources and deployment notes.
 
 The opensearch module is deployed with internal database for authentication.
-It requires master user and password. 
-Currently we are using git-secret to keep the master user password per environment as secret in main.auto.tfvars file.  
-Link to git-secret : https://git-secret.io/.  
-The pgp key is stored in our vault server.  
-The secret name is gpg_passphrase.  
-The used email for gpg key: aeternity@aeternity.com.
+It requires master user and password, which currenty are dynamic from terrafrom. 
 
-The additional Opnensearch resources, which are not supported by terraform provider are implemented with terraform null resource and local exec.  
+The additional Opnensearch resources, which are not supported by terraform provider are implemented with bash script and local exec resource.  
 Please keep in mind that these terraform resources are not aware of curl command result, so check carefully the terraform output.
 
 Opensearch Backend Roles: 
@@ -29,4 +24,4 @@ Opensearch resources:
 Once all Opensearch infrastructure resources are deployed, you can take a look the gitops repo.  
 Link to fluent-bit chart deploy(change the branch for each environment): https://github.com/aeternity/gitops-tools/tree/dev/fluent-bit.
 
-**IMPORTANT: All terraform resources for Opensearch should be succesfully deployed before deployment of the fluent-bit agent.**
+**IMPORTANT: All terraform resources for Opensearch should be succesfully deployed before deployment of the fluent-bit agent to avoid unnecessary cost.**
