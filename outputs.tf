@@ -25,3 +25,7 @@ output "vpc_cidr_block" {
 output "cluster_oidc_issuer_url" {
   value = module.eks.cluster_oidc_issuer_url
 }
+
+output "velero_backeup_s3_bucket_arn" {
+  value = module.s3_bucket_velero_backup.s3_bucket_arn
+}
