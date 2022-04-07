@@ -23,7 +23,7 @@
                 "s3:ListMultipartUploadParts"
             ],
             "Resource": [
-                "${module.s3_bucket_velero_backup.s3_bucket_arn}"
+                "${bucket_arn}/*"
             ]
         },
         {
@@ -32,7 +32,7 @@
                 "s3:ListBucket"
             ],
             "Resource": [
-                "${module.s3_bucket_velero_backup.s3_bucket_arn}"
+                "${bucket_arn}/*"
             ]
         }
     ]

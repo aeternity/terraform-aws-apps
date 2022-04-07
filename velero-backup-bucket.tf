@@ -3,7 +3,7 @@ module "s3_bucket_velero_backup" {
 
   bucket = "velero-backup-${local.env_human}"
   acl    = "private"
-  
+
   versioning = {
     enabled = false
   }
