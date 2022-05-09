@@ -11,7 +11,7 @@
                 "ec2:CreateSnapshot",
                 "ec2:DeleteSnapshot"
             ],
-            "Resource": "*"
+            "Resource": "${cluster_arn}"
         },
         {
             "Effect": "Allow",

@@ -46,3 +46,7 @@ output "opensearch_master_user_password" {
 output "velero_backeup_s3_bucket_arn" {
   value = module.s3_bucket_velero_backup.s3_bucket_arn
 }
+
+output "cluster_arn" {
+  value = module.eks.cluster_arn
+}

@@ -28,7 +28,8 @@ module "aws-velero-role" {
 data "template_file" "velero-backup-policy" {
   template = file("${path.module}/velero-backup-policy.json")
   vars = {
-    bucket_arn = "${module.s3_bucket_velero_backup.s3_bucket_arn}"
+    bucket_arn = "${module.s3_bucket_velero_backup.s3_bucket_arn}",
+    cluster_arn = "${module.eks.cluster_arn}" 
   }
 }
 
