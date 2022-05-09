@@ -25,3 +25,20 @@ output "vpc_cidr_block" {
 output "cluster_oidc_issuer_url" {
   value = module.eks.cluster_oidc_issuer_url
 }
+
+output "cluster_iam_role_arn" {
+  value = module.eks.cluster_iam_role_arn
+}
+
+output "worker_iam_role_arn" {
+  value = module.eks.worker_iam_role_arn
+}
+
+output "worker_iam_role_name" {
+  value = module.eks.worker_iam_role_name
+}
+
+output "opensearch_master_user_password" {
+  value     = random_string.opensearch_master_user_password.result
+  sensitive = true
+}

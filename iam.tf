@@ -68,3 +68,8 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
   role       = module.eks.worker_iam_role_name
   policy_arn = aws_iam_policy.s3_policy.arn
 }
+
+resource "aws_iam_service_linked_role" "es" {
+  count = "${local.env_human}" == "dev" ? 1 : 0
+  aws_service_name = "es.amazonaws.com"
+}
