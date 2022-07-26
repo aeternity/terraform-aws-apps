@@ -89,3 +89,33 @@ data "aws_iam_policy_document" "kubernetes-event-exporter" {
     resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/${local.cluster_name}"]
   }
 }
+
+module "aws_kubernetes_eso_role" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "4.2.0"
+  role_name                     = "${local.env}-eso"
+  create_role                   = true
+  force_detach_policies         = true
+  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns              = [aws_iam_policy.eso_ssm_iam_policy.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:external-secrets:external-secrets"]
+}
+
+resource "aws_iam_policy" "eso_ssm_iam_policy" {
+  name   = "${local.env}-eso"
+  policy = data.aws_iam_policy_document.allow_ssm_read.json
+}
+
+data "aws_iam_policy_document" "allow_ssm_read" {
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:DescribeParameters"]
+    resources = ["*"]
+  }
+
+  statement {
+    effect    = "Allow"
+    actions   = ["ssm:GetParameter*"]
+    resources = ["arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/k8s/${local.env}/*"]
+  }
+}
