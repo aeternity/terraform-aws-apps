@@ -50,3 +50,11 @@ output "velero_backeup_s3_bucket_arn" {
 output "cluster_arn" {
   value = module.eks.cluster_arn
 }
+
+output "cluser_admin_iam_role_arn" {
+  value = aws_iam_role.cluster_admin.arn
+}
+
+output "eso_role_arn" {
+  value = module.aws_kubernetes_eso_role.iam_role_arn
+}
