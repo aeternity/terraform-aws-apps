@@ -70,7 +70,7 @@ locals {
       availability_zones         = "2"
       ebs_enabled                = "true"
       volume_size                = "200"
-      hot_instance_type          = "t3.medium.elasticsearch"
+      hot_instance_type          = "c5.large.elasticsearch"
     }
 
     stg = {
@@ -122,4 +122,3 @@ locals {
   JSON
   ])
 }
-
