@@ -1,5 +1,23 @@
 # Terraform code for aepps infrastructure.
 
+## Environments
+
+Each environment is managed in a separate Terraform workspace.
+All environments must be in parity in terms of services they provide,
+however some variables might differ like instance types, numbers etc.
+
+Environment configuration must be set only in `local.env_config` in main.tf module.
+
+## EKS Authentication
+
+EKS authentication needs explicit IAM role that can be get from `terraform output cluser_admin_iam_role_arn`.
+
+An exmaple for the `dev` cluster:
+
+```bash
+aws eks update-kubeconfig --name dev-wgt7 --role-arn arn:aws:iam::106102538874:role/dev-wgt7-cluster-admin --alias dev-wgt7 --profile aeternity
+```
+
 ## Opensearch module,resources and deployment notes.
 
 The opensearch module is deployed with internal database for authentication.
