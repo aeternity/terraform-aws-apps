@@ -25,17 +25,12 @@ module "aws-velero-role" {
   oidc_fully_qualified_subjects = ["system:serviceaccount:velero:velero"]
 }
 
-data "template_file" "velero-backup-policy" {
-  template = file("${path.module}/velero-backup-policy.json")
-  vars = {
-    bucket_arn = "${module.s3_bucket_velero_backup.s3_bucket_arn}",
-    cluster_arn = "${module.eks.cluster_arn}" 
-  }
-}
-
 resource "aws_iam_policy" "velero-backup-policy" {
   name   = "velero-backup-${local.env_human}"
-  policy = data.template_file.velero-backup-policy.rendered
+  policy = templatefile("${path.module}/velero-backup-policy.json", {
+    bucket_arn = "${module.s3_bucket_velero_backup.s3_bucket_arn}",
+    cluster_arn = "${module.eks.cluster_arn}"
+  })
 }
 
 module "aws-fluentbit-role" {
