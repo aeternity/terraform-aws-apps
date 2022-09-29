@@ -8,6 +8,18 @@ however some variables might differ like instance types, numbers etc.
 
 Environment configuration must be set only in `local.env_config` in main.tf module.
 
+## Terraform authentication
+
+The EKS module in the terraform configuraiton needs a special role to manage a cluster.
+That means one have to use a session with assumed role, even full admins.
+
+Example:
+
+```bash
+./script/auth.sh dev-wgt7
+export AWS_PROFILE=aeternity-session
+```
+
 ## EKS Authentication
 
 EKS authentication needs explicit IAM role that can be get from `terraform output cluser_admin_iam_role_arn`.
