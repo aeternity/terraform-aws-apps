@@ -114,3 +114,19 @@ data "aws_iam_policy_document" "allow_ssm_read" {
     resources = ["arn:aws:ssm:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:parameter/k8s/${local.env}/*"]
   }
 }
+
+module "aws-cert-manager-role" {
+  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version                       = "4.2.0"
+  role_name                     = "cert-manager-${local.env_human}"
+  create_role                   = true
+  force_detach_policies         = true
+  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns              = [aws_iam_policy.cert-manager-policy.arn]
+  oidc_fully_qualified_subjects = ["system:serviceaccount:cert-manager:cert-manager"]
+}
+
+resource "aws_iam_policy" "cert-manager-policy" {
+  name   = "cert-manager-${local.env_human}"
+  policy = file("cert-manager-policy.json")
+}
