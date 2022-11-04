@@ -44,7 +44,7 @@ locals {
       hot_instance_count         = "2"
       availability_zones         = "2"
       ebs_enabled                = "true"
-      volume_size                = "100"
+      volume_size                = "150"
       hot_instance_type          = "t3.medium.elasticsearch"
     }
 
