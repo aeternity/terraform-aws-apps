@@ -29,18 +29,6 @@ module "eks" {
   enable_irsa                                        = true
   tags                                               = local.standard_tags
 
-  workers_group_defaults = {
-    root_volume_type = "gp3"
-  }
-
-  worker_groups = [
-    {
-      instance_type = local.config.eks_worker_instance_type
-      asg_max_size  = local.config.eks_worker_max_count
-      tags          = local.standard_tags_asg_eks
-    }
-  ]
-
   node_groups_defaults = {
     ami_type  = local.config.ami_type
     disk_size = local.config.disk_size
