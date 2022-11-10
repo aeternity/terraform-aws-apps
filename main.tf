@@ -24,7 +24,7 @@ locals {
 
   env_config = {
     dev = {
-      cluster_version            = 1.21
+      cluster_version            = 1.23
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 10
@@ -32,6 +32,7 @@ locals {
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
       ami_type                   = "AL2_x86_64"
+      disk_type                  = "gp3"
       disk_size                  = 100
       cidr                       = "10.0.0.0/16"
       private_subnets            = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
@@ -56,6 +57,7 @@ locals {
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
       ami_type                   = "AL2_x86_64"
+      disk_type                  = "gp3"
       disk_size                  = 100
       cidr                       = "172.16.0.0/16"
       private_subnets            = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
@@ -79,6 +81,7 @@ locals {
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
       ami_type                   = "AL2_x86_64"
+      disk_type                  = "gp3"
       disk_size                  = 100
       cidr                       = "192.168.0.0/16"
       private_subnets            = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]

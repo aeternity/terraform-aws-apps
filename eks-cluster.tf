@@ -30,7 +30,9 @@ module "eks" {
   tags                                               = local.standard_tags
 
   node_groups_defaults = {
+    create_launch_template = true
     ami_type  = local.config.ami_type
+    disk_type = local.config.disk_type
     disk_size = local.config.disk_size
   }
 
@@ -63,7 +65,7 @@ resource "aws_eks_addon" "vpc_cni" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "vpc-cni"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.9.0-eksbuild.1"
+  addon_version     = "v1.12.0-eksbuild.1"
 
   tags = local.standard_tags
 }
@@ -72,7 +74,7 @@ resource "aws_eks_addon" "kube_proxy" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "kube-proxy"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.21.2-eksbuild.2"
+  addon_version     = "v1.23.8-eksbuild.2"
 
   tags = local.standard_tags
 }
@@ -81,7 +83,7 @@ resource "aws_eks_addon" "coredns" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "coredns"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.8.4-eksbuild.1"
+  addon_version     = "v1.8.7-eksbuild.3"
 
   tags = local.standard_tags
 }
