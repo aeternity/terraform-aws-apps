@@ -16,7 +16,7 @@ locals {
 
 module "eks" {
   source                                             = "terraform-aws-modules/eks/aws"
-  version = "17.15.0"
+  version                                            = "17.15.0"
   cluster_name                                       = local.env
   cluster_version                                    = local.config.cluster_version
   vpc_id                                             = module.vpc.vpc_id
@@ -31,9 +31,9 @@ module "eks" {
 
   node_groups_defaults = {
     create_launch_template = true
-    ami_type  = local.config.ami_type
-    disk_type = local.config.disk_type
-    disk_size = local.config.disk_size
+    ami_type               = local.config.ami_type
+    disk_type              = local.config.disk_type
+    disk_size              = local.config.disk_size
   }
 
   node_groups = {

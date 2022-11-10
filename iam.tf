@@ -56,7 +56,7 @@ resource "aws_iam_policy" "s3_policy" {
     Version = "2012-10-17"
     Statement = [
       {
-        Action = "*"
+        Action   = "*"
         Effect   = "Allow"
         Resource = "arn:aws:s3:::aeternity-superhero-graffiti-${local.env_human}"
       },
@@ -70,6 +70,6 @@ resource "aws_iam_role_policy_attachment" "s3_policy_attach" {
 }
 
 resource "aws_iam_service_linked_role" "es" {
-  count = "${local.env_human}" == "dev" ? 1 : 0
+  count            = "${local.env_human}" == "dev" ? 1 : 0
   aws_service_name = "es.amazonaws.com"
 }

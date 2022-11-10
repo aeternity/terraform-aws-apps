@@ -26,9 +26,9 @@ module "aws-velero-role" {
 }
 
 resource "aws_iam_policy" "velero-backup-policy" {
-  name   = "velero-backup-${local.env_human}"
+  name = "velero-backup-${local.env_human}"
   policy = templatefile("${path.module}/velero-backup-policy.json", {
-    bucket_arn = "${module.s3_bucket_velero_backup.s3_bucket_arn}",
+    bucket_arn  = "${module.s3_bucket_velero_backup.s3_bucket_arn}",
     cluster_arn = "${module.eks.cluster_arn}"
   })
 }
