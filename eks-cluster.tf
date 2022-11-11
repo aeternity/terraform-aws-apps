@@ -38,6 +38,7 @@ module "eks" {
 
   node_groups = {
     apps = {
+      version          = local.config.cluster_version
       desired_capacity = local.config.desired_capacity
       max_capacity     = local.config.max_capacity
       min_capacity     = local.config.min_capacity
