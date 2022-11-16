@@ -1,3 +1,7 @@
+output "ebs_role_arn" {
+  value = module.aws-ebs-controller-role.iam_role_arn
+}
+
 output "irsa_role_arn" {
   value = module.aws-lb-controller-role.iam_role_arn
 }
