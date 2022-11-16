@@ -60,6 +60,9 @@ module "eks" {
       instance_types = [local.config.aenodes_instance_type]
       capacity_type  = local.config.capacity_type
       k8s_labels     = local.standard_tags
+      k8s_labels     = merge(local.standard_tags, try(local.config.aenode_tags, {}))
+
+      taints = try(local.config.aenode_taints, [])
 
       update_config = {
         max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`

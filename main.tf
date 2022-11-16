@@ -46,6 +46,8 @@ locals {
       ebs_enabled                = "true"
       volume_size                = "150"
       hot_instance_type          = "t3.medium.elasticsearch"
+      aenode_tags                = { "aenodes" = "yes" }
+      aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
     }
 
     prd = {
@@ -53,7 +55,6 @@ locals {
       desired_capacity = 7
       min_capacity     = 5
       max_capacity     = 10
-
       node_instance_type         = "m5.large"
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
