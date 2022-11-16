@@ -43,7 +43,21 @@ module "eks" {
       max_capacity     = local.config.max_capacity
       min_capacity     = local.config.min_capacity
 
-      instance_types = [local.config.node_instance_type]
+      instance_types = [local.config.apps_instance_type]
+      capacity_type  = local.config.capacity_type
+      k8s_labels     = local.standard_tags
+
+      update_config = {
+        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
+      }
+    }
+    aenodes = {
+      version          = local.config.cluster_version
+      desired_capacity = local.config.desired_capacity
+      max_capacity     = local.config.max_capacity
+      min_capacity     = local.config.min_capacity
+
+      instance_types = [local.config.aenodes_instance_type]
       capacity_type  = local.config.capacity_type
       k8s_labels     = local.standard_tags
 
