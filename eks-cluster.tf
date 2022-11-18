@@ -137,7 +137,6 @@ provider "kubernetes" {
       module.eks.cluster_id,
       "--role",
       aws_iam_role.cluster_admin.arn
-
     ]
   }
   host                   = data.aws_eks_cluster.cluster.endpoint

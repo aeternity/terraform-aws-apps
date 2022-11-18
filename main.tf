@@ -51,10 +51,10 @@ locals {
     }
 
     prd = {
-      cluster_version  = 1.21
-      desired_capacity = 7
-      min_capacity     = 5
-      max_capacity     = 10
+      cluster_version            = 1.21
+      desired_capacity           = 7
+      min_capacity               = 5
+      max_capacity               = 10
       node_instance_type         = "m5.large"
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
