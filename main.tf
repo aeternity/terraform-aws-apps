@@ -78,7 +78,7 @@ locals {
     }
 
     stg = {
-      cluster_version            = 1.21
+      cluster_version            = 1.23
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 10
