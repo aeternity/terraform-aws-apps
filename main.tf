@@ -51,11 +51,11 @@ locals {
     }
 
     prd = {
-      cluster_version  = 1.21
-      desired_capacity = 7
-      min_capacity     = 5
-      max_capacity     = 10
-      node_instance_type         = "m5.large"
+      cluster_version            = 1.21
+      desired_capacity           = 7
+      min_capacity               = 5
+      max_capacity               = 10
+      apps_instance_type         = "m5.large"
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
@@ -73,6 +73,8 @@ locals {
       ebs_enabled                = "true"
       volume_size                = "200"
       hot_instance_type          = "c5.large.elasticsearch"
+      aenode_tags                = { "aenodes" = "yes" }
+      aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
     }
 
     stg = {
@@ -80,7 +82,7 @@ locals {
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 10
-      node_instance_type         = "m5.large"
+      apps_instance_type         = "m5.large"
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
@@ -98,6 +100,8 @@ locals {
       ebs_enabled                = "true"
       volume_size                = "100"
       hot_instance_type          = "t3.medium.elasticsearch"
+      aenode_tags                = { "aenodes" = "yes" }
+      aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
     }
   }
 
