@@ -10,15 +10,15 @@ cluster=$1
 instances=$(aws ec2 describe-instances --filters "Name=tag:kubernetes.io/cluster/$cluster,Values=owned" "Name=instance-state-name,Values=running" --query 'Reservations[].Instances[].{"instanceId": InstanceId, "dnsName": PrivateDnsName}' --output text)
 groups=$(aws autoscaling describe-tags --filters "Name=Key,Values=kubernetes.io/cluster/$cluster" --query 'Tags[].ResourceId' --output text)
 
-# for group in $groups; do
-#     desired=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "$group" --query 'AutoScalingGroups[].DesiredCapacity' --output text)
-#     newDesired="$((desired * 2))"
-#     echo "Doubling ASG capacity from $desired to $newDesired"
-#     aws autoscaling set-desired-capacity --auto-scaling-group-name "$group" --desired-capacity "$newDesired"
-# done
+for group in $groups; do
+    desired=$(aws autoscaling describe-auto-scaling-groups --auto-scaling-group-names "$group" --query 'AutoScalingGroups[].DesiredCapacity' --output text)
+    newDesired="$((desired * 2))"
+    echo "Doubling ASG capacity from $desired to $newDesired"
+    aws autoscaling set-desired-capacity --auto-scaling-group-name "$group" --desired-capacity "$newDesired"
+done
 
-# echo "Wait 300s for new nodes"
-# sleep 300
+echo "Wait 300s for new nodes"
+sleep 300
 
 echo "Cordon all old instances"
 echo "$instances" | while read instance; do
