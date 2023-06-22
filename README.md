@@ -16,7 +16,7 @@ That means one have to use a session with assumed role, even full admins.
 Example:
 
 ```bash
-./script/auth.sh dev-wgt7
+./scripts/auth.sh dev-wgt7
 export AWS_PROFILE=aeternity-session
 ```
 

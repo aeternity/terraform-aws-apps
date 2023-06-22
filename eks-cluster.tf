@@ -51,23 +51,25 @@ module "eks" {
         max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
       }
     }
-    aenodes = {
-      version          = local.config.cluster_version
-      desired_capacity = local.config.desired_capacity
-      max_capacity     = local.config.max_capacity
-      min_capacity     = local.config.min_capacity
 
-      instance_types = [local.config.aenodes_instance_type]
-      capacity_type  = local.config.capacity_type
-      k8s_labels     = local.standard_tags
-      k8s_labels     = merge(local.standard_tags, try(local.config.aenode_tags, {}))
+    # aenodes = {
+    #   version          = local.config.cluster_version
+    #   desired_capacity = local.config.aenodes_desired_capacity
+    #   max_capacity     = local.config.aenodes_max_capacity
+    #   min_capacity     = local.config.aenodes_min_capacity
 
-      taints = try(local.config.aenode_taints, [])
+    #   instance_types = [local.config.aenodes_instance_type]
+    #   capacity_type  = local.config.capacity_type
+    #   k8s_labels     = local.standard_tags
+    #   k8s_labels     = merge(local.standard_tags, try(local.config.aenode_tags, {}))
 
-      update_config = {
-        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
-      }
-    }
+    #   taints = try(local.config.aenode_taints, [])
+
+    #   update_config = {
+    #     max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
+    #   }
+    # }
+
   }
 
   map_roles = [
@@ -83,7 +85,7 @@ resource "aws_eks_addon" "vpc_cni" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "vpc-cni"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.12.0-eksbuild.1"
+  addon_version     = "v1.13.0-eksbuild.1"
 
   tags = local.standard_tags
 }
@@ -92,7 +94,7 @@ resource "aws_eks_addon" "kube_proxy" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "kube-proxy"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.23.8-eksbuild.2"
+  addon_version     = "v1.22.17-eksbuild.2"
 
   tags = local.standard_tags
 }
@@ -101,7 +103,16 @@ resource "aws_eks_addon" "coredns" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "coredns"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.8.7-eksbuild.3"
+  addon_version     = "v1.8.7-eksbuild.6"
+
+  tags = local.standard_tags
+}
+
+resource "aws_eks_addon" "ebs_csi" {
+  cluster_name      = module.eks.cluster_id
+  addon_name        = "aws-ebs-csi-driver"
+  resolve_conflicts = "OVERWRITE"
+  addon_version     = "v1.19.0-eksbuild.2"
 
   tags = local.standard_tags
 }

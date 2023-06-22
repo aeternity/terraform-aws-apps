@@ -51,10 +51,10 @@ locals {
     }
 
     prd = {
-      cluster_version            = 1.21
-      desired_capacity           = 7
+      cluster_version            = 1.23
+      desired_capacity           = 10
       min_capacity               = 5
-      max_capacity               = 10
+      max_capacity               = 20
       apps_instance_type         = "m5.large"
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
@@ -109,6 +109,7 @@ locals {
 
   standard_tags = {
     "env"         = local.env
+    "role"        = "k8s"
     "project"     = "apps"
     "github-repo" = "terraform-aws-apps"
     "github-org"  = "aeternity"
