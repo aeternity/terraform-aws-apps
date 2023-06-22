@@ -94,7 +94,7 @@ resource "aws_eks_addon" "kube_proxy" {
   cluster_name      = module.eks.cluster_id
   addon_name        = "kube-proxy"
   resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.22.17-eksbuild.2"
+  addon_version     = "v1.23.8-eksbuild.2"
 
   tags = local.standard_tags
 }
