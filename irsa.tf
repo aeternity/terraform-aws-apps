@@ -131,15 +131,32 @@ resource "aws_iam_policy" "cert-manager-policy" {
   policy = file("cert-manager-policy.json")
 }
 
+
+# resource "aws_iam_role" "ebs_csi_driver_role" {
+#   name = "ebs_csi_driver_role-${local.env_human}"
+#   assume_role_policy = templatefile("${path.module}/aws-ebs-csi-driver-trust-policy.json", {
+#     account_id   = data.aws_caller_identity.current.account_id,
+#     provider_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+#   })
+# }
+
+# resource "aws_iam_role_policy_attachment" "ebs_role_attachment" {
+#   role = aws_iam_role.ebs_csi_driver_role.name
+#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
+# }
+
 module "aws-ebs-controller-role" {
-  source                        = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
-  version                       = "4.2.0"
-  role_name                     = "aws-ebs-controller-${local.env_human}"
-  create_role                   = true
-  force_detach_policies         = true
-  provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-  role_policy_arns              = [aws_iam_policy.aws-ebs-controller-policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:aws-ebs-controller-${local.env_human}"]
+  source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version               = "4.2.0"
+  role_name             = "aws-ebs-controller-${local.env_human}"
+  create_role           = true
+  force_detach_policies = true
+  provider_url          = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns      = [aws_iam_policy.aws-ebs-controller-policy.arn]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:kube-system:aws-ebs-controller-${local.env_human}",
+    "system:serviceaccount:kube-system:ebs-csi-controller-sa"
+  ]
 }
 
 resource "aws_iam_policy" "aws-ebs-controller-policy" {

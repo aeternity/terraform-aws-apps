@@ -109,12 +109,12 @@ resource "aws_eks_addon" "coredns" {
 }
 
 resource "aws_eks_addon" "ebs_csi" {
-  cluster_name      = module.eks.cluster_id
-  addon_name        = "aws-ebs-csi-driver"
-  resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.19.0-eksbuild.2"
-
-  tags = local.standard_tags
+  cluster_name             = module.eks.cluster_id
+  addon_name               = "aws-ebs-csi-driver"
+  resolve_conflicts        = "OVERWRITE"
+  addon_version            = "v1.19.0-eksbuild.2"
+  service_account_role_arn = module.aws-ebs-controller-role.iam_role_arn
+  tags                     = local.standard_tags
 }
 
 data "aws_eks_cluster" "cluster" {
