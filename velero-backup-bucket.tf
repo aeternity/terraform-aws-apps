@@ -4,6 +4,10 @@ module "s3_bucket_velero_backup" {
   bucket  = "aeternity-velero-backup-${local.env_human}"
   acl     = "private"
 
+  tags = {
+    Name = "aeternity-velero-backup-${local.env_human}"
+  }
+
   versioning = {
     enabled = true
   }

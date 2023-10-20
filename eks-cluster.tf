@@ -34,6 +34,8 @@ module "eks" {
     ami_type               = local.config.ami_type
     disk_type              = local.config.disk_type
     disk_size              = local.config.disk_size
+    ebs_optimized          = true
+    suspended_processes    = ["AZRebalance"]
   }
 
   node_groups = {
@@ -43,7 +45,7 @@ module "eks" {
       max_capacity     = local.config.max_capacity
       min_capacity     = local.config.min_capacity
 
-      instance_types = [local.config.apps_instance_type]
+      instance_types = local.config.apps_instance_types
       capacity_type  = local.config.capacity_type
       k8s_labels     = local.standard_tags
 

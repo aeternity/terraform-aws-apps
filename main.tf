@@ -28,9 +28,9 @@ locals {
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 10
-      apps_instance_type         = "m5.large"
+      apps_instance_types        = ["m6i.large", "m5.large"]
       aenodes_instance_type      = "m5.large"
-      capacity_type              = "ON_DEMAND"
+      capacity_type              = "SPOT"
       max_unavailable_percentage = 50
       ami_type                   = "AL2_x86_64"
       disk_type                  = "gp3"
@@ -55,10 +55,10 @@ locals {
       desired_capacity           = 10
       min_capacity               = 5
       max_capacity               = 20
-      apps_instance_type         = "m5.large"
+      apps_instance_types        = ["m5.large"]
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
-      max_unavailable_percentage = 50
+      max_unavailable_percentage = 30
       ami_type                   = "AL2_x86_64"
       disk_type                  = "gp3"
       disk_size                  = 100
@@ -82,7 +82,7 @@ locals {
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 10
-      apps_instance_type         = "m5.large"
+      apps_instance_types        = ["m5.large"]
       aenodes_instance_type      = "m5.large"
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 50
