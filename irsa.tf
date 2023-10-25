@@ -6,7 +6,10 @@ module "aws-lb-controller-role" {
   force_detach_policies         = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.aws_lb_controller_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kube-system:aws-load-balancer-controller-${local.env_human}"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:tools:aws-load-balancer-controller",
+    "system:serviceaccount:kube-system:aws-load-balancer-controller-${local.env_human}"
+  ]
 }
 
 resource "aws_iam_policy" "aws_lb_controller_policy" {
@@ -22,7 +25,10 @@ module "aws-velero-role" {
   force_detach_policies         = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.velero-backup-policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:velero:velero"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:tools:velero",
+    "system:serviceaccount:velero:velero"
+  ]
 }
 
 resource "aws_iam_policy" "velero-backup-policy" {
@@ -41,7 +47,10 @@ module "aws-fluentbit-role" {
   force_detach_policies         = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.fluentbit.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:logging:fluent-bit"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:tools:fluent-bit",
+    "system:serviceaccount:logging:fluent-bit"
+  ]
 }
 
 resource "aws_iam_policy" "fluentbit" {
@@ -67,7 +76,10 @@ module "aws-kubernetes-event-exporter-role" {
   force_detach_policies         = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.kubernetes-event-exporter.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:kubernetes-event-exporter:kubernetes-event-exporter"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:tools:kubernetes-event-exporter",
+    "system:serviceaccount:kubernetes-event-exporter:kubernetes-event-exporter"
+  ]
 }
 
 resource "aws_iam_policy" "kubernetes-event-exporter" {
@@ -93,7 +105,10 @@ module "aws_kubernetes_eso_role" {
   force_detach_policies         = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.eso_ssm_iam_policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:external-secrets:external-secrets"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:tools:external-secrets",
+    "system:serviceaccount:external-secrets:external-secrets"
+  ]
 }
 
 resource "aws_iam_policy" "eso_ssm_iam_policy" {
@@ -123,7 +138,10 @@ module "aws-cert-manager-role" {
   force_detach_policies         = true
   provider_url                  = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
   role_policy_arns              = [aws_iam_policy.cert-manager-policy.arn]
-  oidc_fully_qualified_subjects = ["system:serviceaccount:cert-manager:cert-manager"]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:tools:cert-manager",
+    "system:serviceaccount:cert-manager:cert-manager"
+  ]
 }
 
 resource "aws_iam_policy" "cert-manager-policy" {
