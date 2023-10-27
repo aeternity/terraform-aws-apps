@@ -84,39 +84,56 @@ module "eks" {
 }
 
 resource "aws_eks_addon" "vpc_cni" {
-  cluster_name      = module.eks.cluster_id
-  addon_name        = "vpc-cni"
-  resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.13.0-eksbuild.1"
+  cluster_name                = module.eks.cluster_id
+  addon_name                  = "vpc-cni"
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+  addon_version               = "v1.13.0-eksbuild.1"
 
   tags = local.standard_tags
 }
 
 resource "aws_eks_addon" "kube_proxy" {
-  cluster_name      = module.eks.cluster_id
-  addon_name        = "kube-proxy"
-  resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.23.8-eksbuild.2"
+  cluster_name                = module.eks.cluster_id
+  addon_name                  = "kube-proxy"
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+  addon_version               = "v1.23.8-eksbuild.2"
 
   tags = local.standard_tags
 }
 
 resource "aws_eks_addon" "coredns" {
-  cluster_name      = module.eks.cluster_id
-  addon_name        = "coredns"
-  resolve_conflicts = "OVERWRITE"
-  addon_version     = "v1.8.7-eksbuild.6"
+  cluster_name                = module.eks.cluster_id
+  addon_name                  = "coredns"
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+  addon_version               = "v1.8.7-eksbuild.6"
 
   tags = local.standard_tags
 }
 
 resource "aws_eks_addon" "ebs_csi" {
-  cluster_name             = module.eks.cluster_id
-  addon_name               = "aws-ebs-csi-driver"
-  resolve_conflicts        = "OVERWRITE"
-  addon_version            = "v1.19.0-eksbuild.2"
-  service_account_role_arn = module.aws-ebs-controller-role.iam_role_arn
-  tags                     = local.standard_tags
+  cluster_name                = module.eks.cluster_id
+  addon_name                  = "aws-ebs-csi-driver"
+  resolve_conflicts_on_create = "OVERWRITE"
+  resolve_conflicts_on_update = "OVERWRITE"
+  addon_version               = "v1.19.0-eksbuild.2"
+  service_account_role_arn    = module.aws-ebs-controller-role.iam_role_arn
+  tags                        = local.standard_tags
+
+  # configuration_values = jsonencode({
+  #   resources = {
+  #     limits = {
+  #       cpu    = "20m"
+  #       memory = "60Mi"
+  #     }
+  #     requests = {
+  #       cpu    = "10m"
+  #       memory = "40Mi"
+  #     }
+  #   }
+  # })
 }
 
 data "aws_eks_cluster" "cluster" {
@@ -129,7 +146,7 @@ data "aws_eks_cluster_auth" "cluster" {
 
 provider "kubernetes" {
   exec {
-    api_version = "client.authentication.k8s.io/v1alpha1"
+    api_version = "client.authentication.k8s.io/v1beta1"
     command     = "aws"
     args = [
       "--region",
