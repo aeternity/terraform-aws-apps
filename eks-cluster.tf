@@ -35,7 +35,6 @@ module "eks" {
     disk_type              = local.config.disk_type
     disk_size              = local.config.disk_size
     ebs_optimized          = true
-    suspended_processes    = ["AZRebalance"]
   }
 
   node_groups = {
