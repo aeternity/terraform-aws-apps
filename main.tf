@@ -50,33 +50,6 @@ locals {
       aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
     }
 
-    prd = {
-      cluster_version            = 1.23
-      desired_capacity           = 10
-      min_capacity               = 5
-      max_capacity               = 20
-      apps_instance_types        = ["m5.large"]
-      aenodes_instance_type      = "m5.large"
-      capacity_type              = "ON_DEMAND"
-      max_unavailable_percentage = 30
-      ami_type                   = "AL2_x86_64"
-      disk_type                  = "gp3"
-      disk_size                  = 100
-      cidr                       = "172.16.0.0/16"
-      private_subnets            = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
-      public_subnets             = ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
-      warm_instance_enabled      = "false"
-      master_instance_count      = "1"
-      master_instance_enabled    = "false"
-      hot_instance_count         = "2"
-      availability_zones         = "2"
-      ebs_enabled                = "true"
-      volume_size                = "200"
-      hot_instance_type          = "c5.large.elasticsearch"
-      aenode_tags                = { "aenodes" = "yes" }
-      aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
-    }
-
     stg = {
       cluster_version            = 1.23
       desired_capacity           = 1
@@ -100,6 +73,33 @@ locals {
       ebs_enabled                = "true"
       volume_size                = "100"
       hot_instance_type          = "t3.medium.elasticsearch"
+      aenode_tags                = { "aenodes" = "yes" }
+      aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
+    }
+
+    prd = {
+      cluster_version            = 1.23
+      desired_capacity           = 10
+      min_capacity               = 5
+      max_capacity               = 20
+      apps_instance_types        = ["m5.large"]
+      aenodes_instance_type      = "m5.large"
+      capacity_type              = "ON_DEMAND"
+      max_unavailable_percentage = 30
+      ami_type                   = "AL2_x86_64"
+      disk_type                  = "gp3"
+      disk_size                  = 100
+      cidr                       = "172.16.0.0/16"
+      private_subnets            = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
+      public_subnets             = ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
+      warm_instance_enabled      = "false"
+      master_instance_count      = "1"
+      master_instance_enabled    = "false"
+      hot_instance_count         = "2"
+      availability_zones         = "2"
+      ebs_enabled                = "true"
+      volume_size                = "200"
+      hot_instance_type          = "c5.large.elasticsearch"
       aenode_tags                = { "aenodes" = "yes" }
       aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
     }
