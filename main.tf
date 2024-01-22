@@ -67,8 +67,8 @@ locals {
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 10
-      apps_instance_types        = ["m5.large"]
-      capacity_type              = "ON_DEMAND"
+      apps_instance_types        = ["m6i.large", "m5.large"]
+      capacity_type              = "SPOT"
       max_unavailable_percentage = 50
       # OpenSearch configuration
       warm_instance_enabled      = "false"
