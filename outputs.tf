@@ -18,6 +18,10 @@ output "vpc_cidr_block" {
   value = module.vpc.vpc_cidr_block
 }
 
+output "nat_public_ips" {
+  value = module.vpc.nat_public_ips
+}
+
 output "cluster_oidc_issuer_url" {
   value = module.eks.cluster_oidc_issuer_url
 }
@@ -54,3 +58,4 @@ output "cluser_admin_iam_role_arn" {
 output "eso_role_arn" {
   value = module.aws_kubernetes_eso_role.iam_role_arn
 }
+
