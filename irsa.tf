@@ -169,19 +169,6 @@ resource "aws_iam_policy" "prometheus-policy" {
   policy = file("prometheus-policy.json")
 }
 
-# resource "aws_iam_role" "ebs_csi_driver_role" {
-#   name = "ebs_csi_driver_role-${local.env_human}"
-#   assume_role_policy = templatefile("${path.module}/aws-ebs-csi-driver-trust-policy.json", {
-#     account_id   = data.aws_caller_identity.current.account_id,
-#     provider_url = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
-#   })
-# }
-
-# resource "aws_iam_role_policy_attachment" "ebs_role_attachment" {
-#   role = aws_iam_role.ebs_csi_driver_role.name
-#   policy_arn = "arn:aws:iam::aws:policy/service-role/AmazonEBSCSIDriverPolicy"
-# }
-
 module "aws-ebs-controller-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
