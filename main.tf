@@ -98,7 +98,7 @@ locals {
       desired_capacity           = 10
       min_capacity               = 5
       max_capacity               = 20
-      apps_instance_types        = ["m5.large"]
+      apps_instance_types        = ["m6i.large"]
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 30
       # OpenSearch configuration
