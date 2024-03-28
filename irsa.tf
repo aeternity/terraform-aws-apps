@@ -151,6 +151,24 @@ resource "aws_iam_policy" "cert-manager-policy" {
 }
 
 
+module "aws-prometheus-role" {
+  source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version               = "4.2.0"
+  role_name             = "prometheus-${local.env_human}"
+  create_role           = true
+  force_detach_policies = true
+  provider_url          = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns      = [aws_iam_policy.prometheus-policy.arn]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:monitoring:kube-prometheus-stack-prometheus",
+  ]
+}
+
+resource "aws_iam_policy" "prometheus-policy" {
+  name   = "prometheus-${local.env_human}"
+  policy = file("prometheus-policy.json")
+}
+
 # resource "aws_iam_role" "ebs_csi_driver_role" {
 #   name = "ebs_csi_driver_role-${local.env_human}"
 #   assume_role_policy = templatefile("${path.module}/aws-ebs-csi-driver-trust-policy.json", {
