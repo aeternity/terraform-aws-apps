@@ -1,7 +1,7 @@
 module "aws_graffiti_server_role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
-  role_name             = "graffiti-server"
+  role_name             = "graffiti-server-${local.env_human}"
   create_role           = true
   force_detach_policies = true
   provider_url          = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
