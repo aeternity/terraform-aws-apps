@@ -8,7 +8,7 @@ module "aws_graffiti_server_role" {
   role_policy_arns      = [aws_iam_policy.graffiti_server_iam_policy.arn]
   oidc_fully_qualified_subjects = [
     "system:serviceaccount:apps:graffiti-server-testnet-app",
-    "system:serviceaccount:apps:graffiti-server-mainnnet-app",
+    "system:serviceaccount:apps:graffiti-server-mainnet-app",
   ]
 }
 
