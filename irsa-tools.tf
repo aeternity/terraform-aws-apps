@@ -17,6 +17,8 @@ resource "aws_iam_policy" "aws_lb_controller_policy" {
   policy = file("lb-controller-iam-policy.json")
 }
 
+
+
 module "aws-velero-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
@@ -38,6 +40,8 @@ resource "aws_iam_policy" "velero-backup-policy" {
     cluster_arn = "${module.eks.cluster_arn}"
   })
 }
+
+
 
 module "aws-fluentbit-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
@@ -69,6 +73,8 @@ data "aws_iam_policy_document" "fluentbit" {
   }
 }
 
+
+
 module "aws-kubernetes-event-exporter-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
@@ -97,6 +103,8 @@ data "aws_iam_policy_document" "kubernetes-event-exporter" {
     resources = ["arn:aws:es:${var.aws_region}:${data.aws_caller_identity.current.account_id}:domain/${local.cluster_name}"]
   }
 }
+
+
 
 module "aws_kubernetes_eso_role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
@@ -131,6 +139,8 @@ data "aws_iam_policy_document" "allow_ssm_read" {
   }
 }
 
+
+
 module "aws-cert-manager-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
@@ -151,6 +161,7 @@ resource "aws_iam_policy" "cert-manager-policy" {
 }
 
 
+
 module "aws-prometheus-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
   version               = "4.2.0"
@@ -168,6 +179,8 @@ resource "aws_iam_policy" "prometheus-policy" {
   name   = "prometheus-${local.env_human}"
   policy = file("prometheus-policy.json")
 }
+
+
 
 module "aws-ebs-controller-role" {
   source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
