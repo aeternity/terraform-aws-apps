@@ -41,12 +41,48 @@ module "eks" {
     apps = {
       version          = local.config.cluster_version
       desired_capacity = local.config.desired_capacity
+      min_capacity     = local.config.min_capacity
+      max_capacity     = local.config.max_capacity
+
+      instance_types = local.config.apps_instance_types
+      capacity_type  = local.config.capacity_type
+      k8s_labels     = local.standard_tags
+
+      subnets  = [module.vpc.private_subnets[0]]
+
+      update_config = {
+        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
+      }
+    }
+
+    apps2 = {
+      version          = local.config.cluster_version
+      desired_capacity = local.config.desired_capacity
       max_capacity     = local.config.max_capacity
       min_capacity     = local.config.min_capacity
 
       instance_types = local.config.apps_instance_types
       capacity_type  = local.config.capacity_type
       k8s_labels     = local.standard_tags
+
+      subnets  = [module.vpc.private_subnets[1]]
+
+      update_config = {
+        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
+      }
+    }
+
+    apps3 = {
+      version          = local.config.cluster_version
+      desired_capacity = local.config.desired_capacity
+      max_capacity     = local.config.max_capacity
+      min_capacity     = local.config.min_capacity
+
+      instance_types = local.config.apps_instance_types
+      capacity_type  = local.config.capacity_type
+      k8s_labels     = local.standard_tags
+
+      subnets  = [module.vpc.private_subnets[2]]
 
       update_config = {
         max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`

@@ -32,10 +32,10 @@ locals {
       cidr                       = "10.0.0.0/16"
       private_subnets            = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
       public_subnets             = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
-      # Apps node group
+      # Node capacity per node group. 1 node group per AZ = 3 groups
       desired_capacity           = 1
       min_capacity               = 1
-      max_capacity               = 10
+      max_capacity               = 3
       apps_instance_types        = ["m6i.large", "m5.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
@@ -63,10 +63,10 @@ locals {
       cidr                       = "192.168.0.0/16"
       private_subnets            = ["192.168.1.0/24", "192.168.2.0/24", "192.168.3.0/24"]
       public_subnets             = ["192.168.4.0/24", "192.168.5.0/24", "192.168.6.0/24"]
-      # Apps node group
+      # Node capacity per node group. 1 node group per AZ = 3 groups
       desired_capacity           = 1
       min_capacity               = 1
-      max_capacity               = 10
+      max_capacity               = 3
       apps_instance_types        = ["m6i.large", "m5.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
@@ -94,10 +94,10 @@ locals {
       cidr                       = "172.16.0.0/16"
       private_subnets            = ["172.16.1.0/24", "172.16.2.0/24", "172.16.3.0/24"]
       public_subnets             = ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
-      # Apps node group
-      desired_capacity           = 10
-      min_capacity               = 5
-      max_capacity               = 20
+      # Node capacity per node group. 1 node group per AZ = 3 groups
+      desired_capacity           = 3
+      min_capacity               = 2
+      max_capacity               = 7
       apps_instance_types        = ["m6i.large"]
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 30
