@@ -36,7 +36,8 @@ locals {
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 3
-      apps_instance_types        = ["m6i.large", "m5.large"]
+      # use single instance type because of autoscaller and max-nodes limit
+      apps_instance_types        = ["m6i.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
       # OpenSearch configuration
@@ -67,7 +68,8 @@ locals {
       desired_capacity           = 1
       min_capacity               = 1
       max_capacity               = 3
-      apps_instance_types        = ["m6i.large", "m5.large"]
+      # use single instance type because of autoscaller and max-nodes limit
+      apps_instance_types        = ["m6i.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
       # OpenSearch configuration
@@ -98,6 +100,7 @@ locals {
       desired_capacity           = 3
       min_capacity               = 2
       max_capacity               = 7
+      # use single instance type because of autoscaller and max-nodes limit
       apps_instance_types        = ["m6i.large"]
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 30
