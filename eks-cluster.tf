@@ -125,6 +125,14 @@ resource "aws_eks_addon" "vpc_cni" {
   resolve_conflicts_on_update = "OVERWRITE"
   addon_version               = "v1.13.0-eksbuild.1"
 
+  configuration_values = jsonencode({
+    env = {
+      # Reference docs https://docs.aws.amazon.com/eks/latest/userguide/cni-increase-ip-addresses.html
+      ENABLE_PREFIX_DELEGATION = "true"
+      WARM_PREFIX_TARGET       = "1"
+    }
+  })
+
   tags = local.standard_tags
 }
 
@@ -154,7 +162,9 @@ resource "aws_eks_addon" "ebs_csi" {
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
   addon_version               = "v1.19.0-eksbuild.2"
+
   service_account_role_arn    = module.aws-ebs-controller-role.iam_role_arn
+
   tags                        = local.standard_tags
 
   # configuration_values = jsonencode({
