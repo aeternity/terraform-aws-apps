@@ -200,3 +200,43 @@ resource "aws_iam_policy" "aws-ebs-controller-policy" {
   name   = "aws-ebs-controller-${local.env_human}"
   policy = file("aws-ebs-controller-policy.json")
 }
+
+module "aws_loki_role" {
+  source                = "terraform-aws-modules/iam/aws//modules/iam-assumable-role-with-oidc"
+  version               = "4.2.0"
+  role_name             = "loki-${local.env_human}"
+  create_role           = true
+  force_detach_policies = true
+  provider_url          = replace(module.eks.cluster_oidc_issuer_url, "https://", "")
+  role_policy_arns      = [aws_iam_policy.loki_iam_policy.arn]
+  oidc_fully_qualified_subjects = [
+    "system:serviceaccount:monitoring:loki",
+  ]
+}
+
+resource "aws_iam_policy" "loki_iam_policy" {
+  name   = "loki-${local.env_human}"
+  policy = data.aws_iam_policy_document.loki_allow_s3.json
+}
+
+// https://grafana.com/docs/loki/latest/operations/storage/#s3
+data "aws_iam_policy_document" "loki_allow_s3" {
+  statement {
+    effect    = "Allow"
+    actions   = [
+      "s3:ListBucket",
+      "s3:PutObject",
+      "s3:GetObject",
+      "s3:DeleteObject",
+    ]
+    resources = [
+      aws_s3_bucket.loki_chunks.arn,
+      aws_s3_bucket.loki_ruler.arn,
+      # aws_s3_bucket.loki_admin.arn,
+      "${aws_s3_bucket.loki_chunks.arn}/*",
+      "${aws_s3_bucket.loki_ruler.arn}/*",
+      # "${aws_s3_bucket.loki_admin.arn}/*",
+    ]
+  }
+}
+

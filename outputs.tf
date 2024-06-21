@@ -59,6 +59,10 @@ output "eso_role_arn" {
   value = module.aws_kubernetes_eso_role.iam_role_arn
 }
 
+output "loki_role_arn" {
+  value = module.aws_loki_role.iam_role_arn
+}
+
 ## Applications
 output "graffiti_server_role_arn" {
   value = module.aws_graffiti_server_role.iam_role_arn
