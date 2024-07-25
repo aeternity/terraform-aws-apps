@@ -98,8 +98,8 @@ locals {
       public_subnets             = ["172.16.4.0/24", "172.16.5.0/24", "172.16.6.0/24"]
       # Node capacity per node group. 1 node group per AZ = 3 groups
       desired_capacity           = 3
-      min_capacity               = 2
-      max_capacity               = 7
+      min_capacity               = 3
+      max_capacity               = 9
       # use single instance type because of autoscaller and max-nodes limit
       apps_instance_types        = ["m6i.large"]
       capacity_type              = "ON_DEMAND"
