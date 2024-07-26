@@ -24,7 +24,7 @@ locals {
 
   env_config = {
     dev = {
-      cluster_version            = 1.23
+      cluster_version            = "1.30"
       # Node group defaults
       ami_type                   = "AL2_x86_64"
       disk_type                  = "gp3"
@@ -56,7 +56,7 @@ locals {
     }
 
     stg = {
-      cluster_version            = 1.23
+      cluster_version            = "1.30"
       # Node group defaults
       ami_type                   = "AL2_x86_64"
       disk_type                  = "gp3"
@@ -88,7 +88,7 @@ locals {
     }
 
     prd = {
-      cluster_version            = 1.23
+      cluster_version            = "1.30"
       # Node group defaults
       ami_type                   = "AL2_x86_64"
       disk_type                  = "gp3"
