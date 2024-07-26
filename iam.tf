@@ -34,7 +34,12 @@ resource "aws_iam_policy" "autoscaler_policy" {
           "autoscaling:DescribeScalingActivities",
           "autoscaling:DescribeTags",
           "autoscaling:SetDesiredCapacity",
-          "autoscaling:TerminateInstanceInAutoScalingGroup"
+          "autoscaling:TerminateInstanceInAutoScalingGroup",
+          "ec2:DescribeImages",
+          "ec2:DescribeInstanceTypes",
+          "ec2:DescribeLaunchTemplateVersions",
+          "ec2:GetInstanceTypesFromInstanceRequirements",
+          "eks:DescribeNodegroup"
         ]
         Effect   = "Allow"
         Resource = "*"
