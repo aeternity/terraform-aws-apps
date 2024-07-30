@@ -123,7 +123,7 @@ resource "aws_eks_addon" "vpc_cni" {
   addon_name                  = "vpc-cni"
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  addon_version               = "v1.13.0-eksbuild.1"
+  addon_version               = "v1.18.1-eksbuild.3"
 
   configuration_values = jsonencode({
     env = {
@@ -141,7 +141,7 @@ resource "aws_eks_addon" "kube_proxy" {
   addon_name                  = "kube-proxy"
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  addon_version               = "v1.23.8-eksbuild.2"
+  addon_version               = "v1.30.0-eksbuild.3"
 
   tags = local.standard_tags
 }
@@ -151,7 +151,7 @@ resource "aws_eks_addon" "coredns" {
   addon_name                  = "coredns"
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  addon_version               = "v1.8.7-eksbuild.6"
+  addon_version               = "v1.11.1-eksbuild.8"
 
   tags = local.standard_tags
 }
@@ -161,7 +161,7 @@ resource "aws_eks_addon" "ebs_csi" {
   addon_name                  = "aws-ebs-csi-driver"
   resolve_conflicts_on_create = "OVERWRITE"
   resolve_conflicts_on_update = "OVERWRITE"
-  addon_version               = "v1.19.0-eksbuild.2"
+  addon_version               = "v1.32.0-eksbuild.1"
 
   service_account_role_arn    = module.aws-ebs-controller-role.iam_role_arn
 
