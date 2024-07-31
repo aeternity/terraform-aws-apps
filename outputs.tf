@@ -38,11 +38,6 @@ output "worker_iam_role_name" {
   value = module.eks.worker_iam_role_name
 }
 
-output "opensearch_master_user_password" {
-  value     = random_string.opensearch_master_user_password.result
-  sensitive = true
-}
-
 output "velero_backeup_s3_bucket_arn" {
   value = module.s3_bucket_velero_backup.s3_bucket_arn
 }

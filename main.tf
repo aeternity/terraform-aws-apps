@@ -1,3 +1,4 @@
+data "aws_region" "current" {}
 data "aws_availability_zones" "available" {}
 
 resource "random_string" "id_suffix" {
@@ -6,21 +7,10 @@ resource "random_string" "id_suffix" {
   upper   = false
 }
 
-resource "random_string" "opensearch_master_user_password" {
-  length  = 8
-  special = true
-  upper   = true
-}
-
 locals {
   # use this variable as prefix for all resource names. This avoids conflicts with globally unique resources (all resources with a hostname)
   env       = "${terraform.workspace}-${random_string.id_suffix.result}"
   env_human = terraform.workspace
-
-  cluster_name                    = "opensearch-${local.env_human}"
-  cluster_domain                  = "aepps.com"
-  es_linked_role                  = data.aws_iam_role.service_linked_role.id
-  opensearch_master_user_password = random_string.opensearch_master_user_password.result
 
   env_config = {
     dev = {
@@ -40,15 +30,6 @@ locals {
       apps_instance_types        = ["m6i.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
-      # OpenSearch configuration
-      warm_instance_enabled      = "false"
-      master_instance_count      = "1"
-      master_instance_enabled    = "false"
-      hot_instance_count         = "2"
-      availability_zones         = "2"
-      ebs_enabled                = "true"
-      volume_size                = "150"
-      hot_instance_type          = "t3.medium.elasticsearch"
       # Nodes node group
       aenodes_instance_type      = "m5.large"
       aenode_tags                = { "aenodes" = "yes" }
@@ -72,15 +53,6 @@ locals {
       apps_instance_types        = ["m6i.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
-      # OpenSearch configuration
-      warm_instance_enabled      = "false"
-      master_instance_count      = "1"
-      master_instance_enabled    = "false"
-      hot_instance_count         = "2"
-      availability_zones         = "2"
-      ebs_enabled                = "true"
-      volume_size                = "100"
-      hot_instance_type          = "t3.medium.elasticsearch"
       # Nodes node group
       aenodes_instance_type      = "m5.large"
       aenode_tags                = { "aenodes" = "yes" }
@@ -104,15 +76,6 @@ locals {
       apps_instance_types        = ["m6i.large"]
       capacity_type              = "ON_DEMAND"
       max_unavailable_percentage = 30
-      # OpenSearch configuration
-      warm_instance_enabled      = "false"
-      master_instance_count      = "1"
-      master_instance_enabled    = "false"
-      hot_instance_count         = "2"
-      availability_zones         = "2"
-      ebs_enabled                = "true"
-      volume_size                = "200"
-      hot_instance_type          = "c5.large.elasticsearch"
       # Nodes node group
       aenodes_instance_type      = "m5.large"
       aenode_tags                = { "aenodes" = "yes" }
