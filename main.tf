@@ -27,11 +27,11 @@ locals {
       min_capacity               = 1
       max_capacity               = 3
       # use single instance type because of autoscaller and max-nodes limit
-      apps_instance_types        = ["m6i.large"]
+      apps_instance_types        = ["m7i.large"]
       capacity_type              = "SPOT"
       max_unavailable_percentage = 50
       # Nodes node group
-      aenodes_instance_type      = "m5.large"
+      aenodes_instance_type      = "m7i.large"
       aenode_tags                = { "aenodes" = "yes" }
       aenode_taints              = [{ key = "aenodes", value = "yes", effect = "NO_SCHEDULE" }]
     }
