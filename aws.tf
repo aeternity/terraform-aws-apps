@@ -1,16 +1,4 @@
 terraform {
-  required_version = "1.1.4"
-  required_providers {
-    aws = {
-      source = "hashicorp/aws"
-    }
-
-    kubernetes = {
-      source  = "hashicorp/kubernetes"
-      version = "~> 2.4"
-    }
-  }
-
   backend "s3" {
     bucket         = "aeternity-terraform-states"
     key            = "ae-apps.tfstate"
@@ -22,4 +10,3 @@ terraform {
 provider "aws" {
   region = "eu-central-1"
 }
-
