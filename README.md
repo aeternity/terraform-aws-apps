@@ -29,3 +29,25 @@ An exmaple for the `dev` cluster:
 ```bash
 aws eks update-kubeconfig --name dev-wgt7 --role-arn arn:aws:iam::106102538874:role/dev-wgt7-cluster-admin --alias dev-wgt7 --profile aeternity
 ```
+
+## Destroy
+
+### VPC
+
+The ingress load balancer must be deleted manually before destorying the cluster.
+
+### Buckets
+
+All S3 buckets must be empty prior deletion:
+- aeternity-loki-chunks-*
+- aeternity-loki-ruler-*
+- aeternity-velero-backup-*
+- aeternity-graffiti-server-*
+
+### Auth
+After first pass of terraform destroy the cluster admin will be deleted and start getting auth errors.
+
+The state of k8s cluster auth has to be deleted and then run destroy again:
+```shell
+terraform state rm "module.eks.kubernetes_config_map.aws_auth[0]"
+```
