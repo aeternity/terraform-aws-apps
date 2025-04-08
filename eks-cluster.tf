@@ -72,22 +72,22 @@ module "eks" {
       }
     }
 
-    apps3 = {
-      version          = local.config.cluster_version
-      desired_capacity = local.config.desired_capacity
-      max_capacity     = local.config.max_capacity
-      min_capacity     = local.config.min_capacity
+    # apps3 = {
+    #   version          = local.config.cluster_version
+    #   desired_capacity = local.config.desired_capacity
+    #   max_capacity     = local.config.max_capacity
+    #   min_capacity     = local.config.min_capacity
 
-      instance_types = local.config.apps_instance_types
-      capacity_type  = local.config.capacity_type
-      k8s_labels     = local.standard_tags
+    #   instance_types = local.config.apps_instance_types
+    #   capacity_type  = local.config.capacity_type
+    #   k8s_labels     = local.standard_tags
 
-      subnets  = [module.vpc.private_subnets[2]]
+    #   subnets  = [module.vpc.private_subnets[2]]
 
-      update_config = {
-        max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
-      }
-    }
+    #   update_config = {
+    #     max_unavailable_percentage = local.config.max_unavailable_percentage # or set `max_unavailable`
+    #   }
+    # }
 
     # aenodes = {
     #   version          = local.config.cluster_version
